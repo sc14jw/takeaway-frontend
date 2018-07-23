@@ -21,7 +21,7 @@ export default {
       console.log('pollId = ' + this.pollId)
     },
     newPoll () {
-      console.log('new poll clicked.')
+      this.$router.push('new')
     }
   }
 }
