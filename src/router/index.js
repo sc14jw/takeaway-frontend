@@ -14,7 +14,7 @@ export default new Router({
       component: NewPoll
     },
     {
-      path: '/vote',
+      path: '/vote/:id',
       name: 'VotePage',
       component: VotePage
     },

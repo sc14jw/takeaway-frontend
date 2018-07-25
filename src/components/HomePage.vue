@@ -18,7 +18,10 @@ export default {
   },
   methods: {
     openPoll () {
-      console.log('pollId = ' + this.pollId)
+      this.$router.push({
+        name: 'VotePage',
+        params: { id: this.pollId }
+      })
     },
     newPoll () {
       this.$router.push('new')

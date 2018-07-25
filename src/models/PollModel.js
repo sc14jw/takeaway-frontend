@@ -14,6 +14,11 @@ class MockPollModel {
       resolve(vote)
     })
   }
+  get (id) {
+    return new Promise((resolve, reject) => {
+      resolve(this.votes.get(id))
+    })
+  }
 }
 
 /**

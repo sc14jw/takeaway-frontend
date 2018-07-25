@@ -4,6 +4,7 @@
 export class Poll {
   constructor (options) {
     this.options = options
+    this.votes = {}
   }
 }
 
