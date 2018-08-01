@@ -6,6 +6,24 @@ export class Poll {
     this.options = options
     this.votes = {}
   }
+  addVote (user, option) {
+    this.removeVote(user)
+    if (this.votes[option] === undefined) {
+      this.votes[option] = []
+    }
+    this.votes[option].push(user)
+  }
+  removeVote (user) {
+    for (let option in this.votes) {
+      if (this.votes.hasOwnProperty(option)) {
+        const index = this.votes[option].indexOf(user)
+        if (index > -1) {
+          this.votes[option].splice(index, 1)
+          return
+        }
+      }
+    }
+  }
 }
 
 /**

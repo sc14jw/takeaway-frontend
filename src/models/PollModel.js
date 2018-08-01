@@ -7,16 +7,23 @@ class MockPollModel {
     this.id = 0
   }
   create (vote) {
+    vote.id = '' + this.id
+    this.id++
+    this.votes.push(vote)
     return new Promise((resolve, reject) => {
-      this.votes.push(vote)
-      vote.id = this.id
-      this.id++
       resolve(vote)
     })
   }
   get (id) {
     return new Promise((resolve, reject) => {
-      resolve(this.votes.get(id))
+      for (let i in this.votes) {
+        let elem = this.votes[i]
+        if (elem.id === id) {
+          resolve(elem)
+          return
+        }
+      }
+      resolve(null)
     })
   }
 }

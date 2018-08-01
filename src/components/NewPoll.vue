@@ -12,7 +12,8 @@
 </template>
 <script>
 import { Instance } from '@/models/PollModel'
-import { Option } from '@/entities/Poll'
+import { Option, Poll } from '@/entities/Poll'
+
 export default {
   name: 'NewPoll',
   data () {
@@ -25,9 +26,14 @@ export default {
   },
   methods: {
     createPoll () {
-      Instance.create(this.options)
+      Instance.create(new Poll(this.options))
         .then(poll => {
           this.poll = poll
+          console.log('poll id = ' + poll.id)
+          this.$router.push({
+            name: 'VotePage',
+            params: { id: poll.id }
+          })
         })
     },
     addOption () {
