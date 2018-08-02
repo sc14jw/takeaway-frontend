@@ -10,7 +10,7 @@
       </div>
       <div id="option_display">
         <ul class="no_bullets">
-          <li v-for="option in poll.options" :key="option.name">
+          <li v-for="option in poll.options" :key="option.name" id="options_list">
             <a v-on:click="addVote(option.name)"> {{ option.name }} </a>
             <ul v-for="vote in poll.votes[option.name]" :key="vote" class="no_bullets" id="votes"> <li> {{ vote }} </li> </ul>
           </li>
@@ -66,5 +66,8 @@ export default {
 }
 #option_display {
   width: 70vh;
+}
+#options_list {
+  cursor: pointer;
 }
 </style>
