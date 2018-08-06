@@ -1,3 +1,5 @@
+import { Poll } from '../entities/Poll'
+
 const request = require('request')
 const path = require('path')
 
@@ -11,12 +13,12 @@ class MockPollModel {
     this.votes = []
     this.id = 0
   }
-  create (vote) {
-    vote.id = '' + this.id
+  create (poll) {
+    poll.id = '' + this.id
     this.id++
-    this.votes.push(vote)
+    this.votes.push(poll)
     return new Promise((resolve, reject) => {
-      resolve(vote)
+      resolve(poll)
     })
   }
   get (id) {
@@ -37,18 +39,20 @@ class MockPollModel {
  * Real model implementation.
  */
 class PollModel {
-  create (vote) {
+  create (poll) {
     return new Promise((resolve, reject) => {
-      request.post('http://' + path.join(process.env.SERVER_ADDRESS, PollPath))
-        .form(JSON.stringify(vote))
-        .on('error', err => reject(err))
-        .on('response', response => {
-          if (response.statusCode === 201) {
-            resolve(JSON.parse(response.body))
-          } else {
-            reject(response.statusCode)
-          }
-        })
+      request.put({ url: 'http://' + path.join(process.env.SERVER_ADDRESS, PollPath), form: JSON.stringify(poll.options) }, (err, httpResponse, body) => {
+        if (err) {
+          reject(err)
+        }
+        if (httpResponse.statusCode === 201) {
+          console.log('response = ' + JSON.stringify(httpResponse))
+          console.log('Response body = ' + body)
+          resolve(JSON.parse(body))
+        } else {
+          reject(httpResponse.statusCode)
+        }
+      })
     })
   }
   get (id) {
@@ -59,7 +63,11 @@ class PollModel {
           reject(err)
         } else {
           console.log('body = ' + body)
-          resolve(JSON.stringify(body))
+          let _poll = JSON.parse(body)
+          let poll = new Poll(_poll.options)
+          poll.id = _poll.id
+          poll.votes = _poll.votes
+          resolve(poll)
         }
       })
     })
