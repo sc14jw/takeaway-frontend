@@ -4,6 +4,7 @@ const request = require('request')
 const path = require('path')
 
 const PollPath = 'poll'
+const VotePath = 'vote'
 
 /**
  * Mock model implementation.
@@ -31,6 +32,20 @@ class MockPollModel {
         }
       }
       resolve(null)
+    })
+  }
+  addVote (id, user, resID) {
+    this.votes.forEach(elem => {
+      if (elem.id === id) {
+        elem.addVote(user, resID)
+      }
+    })
+  }
+  removeVote (id, user) {
+    this.votes.forEach(elem => {
+      if (elem.id === id) {
+        elem.removeVote(user)
+      }
     })
   }
 }
@@ -71,6 +86,18 @@ class PollModel {
         }
       })
     })
+  }
+  addVote (id, user, resID) {
+    let properties = { id: id }
+    request.post({
+      url: 'http://' + path.join(process.env.SERVER_ADDRESS, VotePath),
+      qs: properties,
+      form: JSON.stringify({ user: user, restaurant_ID: resID })
+    })
+  }
+  removeVote (id, user) {
+    let properties = { id: id, user: user }
+    request.delete({ url: 'http://' + path.join(process.env.SERVER_ADDRESS, VotePath), qs: properties })
   }
 }
 

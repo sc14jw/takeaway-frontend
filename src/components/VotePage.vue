@@ -12,7 +12,7 @@
         <ul class="no_bullets">
           <li v-for="option in poll.options" :key="option.name" id="options_list">
             <a v-on:click="addVote(option.name)"> {{ option.name }} </a>
-            <ul v-for="vote in poll.votes[option.name]" :key="vote" class="no_bullets" id="votes"> <li> {{ vote }} </li> </ul>
+            <ul v-for="vote in poll.votes[option.id]" :key="vote" class="no_bullets" id="votes"> <li> {{ vote }} </li> </ul>
           </li>
         </ul>
       </div>
@@ -32,13 +32,15 @@ export default {
     }
   },
   methods: {
-    addVote (name) {
-      this.poll.addVote(this.user, name)
+    addVote (id) {
+      this.poll.addVote(this.user, id)
       this.$forceUpdate()
+      Instance.addVote(this.poll.id, this.user, id)
     },
     clearVote () {
       this.poll.removeVote(this.user)
       this.$forceUpdate()
+      Instance.removeVote(this.poll.id, this.user)
     }
   },
   mounted: function () {
