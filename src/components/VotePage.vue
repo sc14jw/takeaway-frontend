@@ -16,19 +16,28 @@
           </li>
         </ul>
       </div>
-      <button v-on:click="clearVote()"> Clear Vote </button>
+      <button v-on:click="clearVote()"> Clear Vote </button> <br><br>
+      <a v-on:click="modifyShowOption(true)" v-if="!showAddOption" class="link_text"> Add option </a>
+      <div id="add_option_section" v-if="showAddOption">
+        <input v-model="optionID" placeholder="Place ID"> <input v-model="optionName" placeholder="Place Name"> <button v-on:click="addOption()"> Add </button> <br>
+        <a v-on:click="modifyShowOption(false)" class="link_text"> Show less </a>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { Instance } from '@/models/PollModel'
+import { Option } from '@/entities/Poll'
 const NamePromptText = 'Please enter your name for voting:'
 export default {
   name: 'VotePage',
   data () {
     return {
       user: 'test',
-      poll: null
+      poll: null,
+      optionID: null,
+      optionName: null,
+      showAddOption: false
     }
   },
   methods: {
@@ -41,6 +50,16 @@ export default {
       this.poll.removeVote(this.user)
       this.$forceUpdate()
       Instance.removeVote(this.poll.id, this.user)
+    },
+    addOption () {
+      this.poll.addOption(new Option(this.optionID, this.optionName))
+      this.$forceUpdate()
+      Instance.update(this.poll)
+      this.optionID = null
+      this.optionName = null
+    },
+    modifyShowOption (showOption) {
+      this.showAddOption = showOption
     }
   },
   mounted: function () {
@@ -60,6 +79,12 @@ export default {
 }
 .float_right {
   float: right;
+}
+.link_text {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #5e5f60;
+  font-size: 12px;
 }
 #votes {
   display: inline-block;

@@ -34,6 +34,14 @@ class MockPollModel {
       resolve(null)
     })
   }
+  update (poll) {
+    this.votes.forEach(elem => {
+      if (elem.id === poll.id) {
+        this.votes.splice(this.votes.indexOf(elem), 1)
+        this.votes.push(poll)
+      }
+    })
+  }
   addVote (id, user, resID) {
     this.votes.forEach(elem => {
       if (elem.id === id) {
@@ -86,6 +94,9 @@ class PollModel {
         }
       })
     })
+  }
+  update (poll) {
+    request.post({ url: 'http://' + path.join(process.env.SERVER_ADDRESS, PollPath), form: JSON.stringify(poll) })
   }
   addVote (id, user, resID) {
     let properties = { id: id }

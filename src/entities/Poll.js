@@ -24,6 +24,9 @@ export class Poll {
       }
     }
   }
+  addOption (option) {
+    this.options.push(option)
+  }
 }
 
 /**
