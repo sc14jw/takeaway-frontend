@@ -4,39 +4,39 @@
     <p v-if="!poll"> Please enter a valid poll ID </p>
     <div v-if="poll">
       <p> Poll ID: {{ $route.params.id }} </p>
-      <div class="float_right">
-        <h2> Poll can be accessed here: </h2>
-        <a> {{ $route.fullPath }} </a>
-      </div>
+      <hr>
+      <div id="small_spacer"></div>
       <div id="option_display">
+        <h4> Poll Options: </h4>
         <ul class="no_bullets">
           <li v-for="option in poll.options" :key="option.name" id="options_list">
-            <a v-on:click="addVote(option.name)"> {{ option.name }} </a>
+            <a v-on:click="addVote(option.id)"> {{ option.name }} </a>
             <ul v-for="vote in poll.votes[option.id]" :key="vote" class="no_bullets" id="votes"> <li> {{ vote }} </li> </ul>
           </li>
         </ul>
       </div>
-      <button v-on:click="clearVote()"> Clear Vote </button> <br><br>
       <a v-on:click="modifyShowOption(true)" v-if="!showAddOption" class="link_text"> Add option </a>
       <div id="add_option_section" v-if="showAddOption">
-        <input v-model="optionID" placeholder="Place ID"> <input v-model="optionName" placeholder="Place Name"> <button v-on:click="addOption()"> Add </button> <br>
+        <add-option-component v-on:placeAdded="newOption"></add-option-component>
         <a v-on:click="modifyShowOption(false)" class="link_text"> Show less </a>
       </div>
+      <br>
+      <button v-on:click="clearVote()"> Clear Vote </button>
     </div>
   </div>
 </template>
 <script>
 import { Instance } from '@/models/PollModel'
-import { Option } from '@/entities/Poll'
+import AddOptionComponent from '@/components/poll/AddOption'
+
 const NamePromptText = 'Please enter your name for voting:'
 export default {
   name: 'VotePage',
+  components: { AddOptionComponent },
   data () {
     return {
       user: 'test',
       poll: null,
-      optionID: null,
-      optionName: null,
       showAddOption: false
     }
   },
@@ -51,15 +51,13 @@ export default {
       this.$forceUpdate()
       Instance.removeVote(this.poll.id, this.user)
     },
-    addOption () {
-      this.poll.addOption(new Option(this.optionID, this.optionName))
-      this.$forceUpdate()
-      Instance.update(this.poll)
-      this.optionID = null
-      this.optionName = null
-    },
     modifyShowOption (showOption) {
       this.showAddOption = showOption
+    },
+    newOption (option) {
+      this.poll.addOption(option)
+      this.$forceUpdate()
+      Instance.update(this.poll)
     }
   },
   mounted: function () {
@@ -96,5 +94,8 @@ export default {
 }
 #options_list {
   cursor: pointer;
+}
+#small_spacer {
+  height: 10px;
 }
 </style>

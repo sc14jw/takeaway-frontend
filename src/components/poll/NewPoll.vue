@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1> Create a new Poll </h1>
-    <span> <input v-model="optionId" placeholder="Place ID"> <input v-model="optionName" placeholder="Place Name"> <button v-on:click="addOption()"> Add </button> </span>
+    <add-option-component v-on:placeAdded="newOption"></add-option-component>
     <div id="optionDisplay">
       <ul id="optionList">
         <li v-for="option in options" :key="option.name"> {{ option.name }} <span id="removeIcon" v-on:click="removeOption(option)"> x </span> </li>
@@ -12,10 +12,12 @@
 </template>
 <script>
 import { Instance } from '@/models/PollModel'
-import { Option, Poll } from '@/entities/Poll'
+import { Poll } from '@/entities/Poll'
+import AddOptionComponent from '@/components/poll/AddOption'
 
 export default {
   name: 'NewPoll',
+  components: { AddOptionComponent },
   data () {
     return {
       options: [],
@@ -36,8 +38,8 @@ export default {
           })
         })
     },
-    addOption () {
-      this.options.push(new Option(this.optionId, this.optionName))
+    newOption (option) {
+      this.options.push(option)
       this.optionId = null
       this.optionName = null
     },

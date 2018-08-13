@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HomePage from '@/components/HomePage'
-import NewPoll from '@/components/NewPoll'
-import VotePage from '@/components/VotePage'
+import NewPoll from '@/components/poll/NewPoll'
+import VotePage from '@/components/poll/VotePage'
 
 Vue.use(Router)
 

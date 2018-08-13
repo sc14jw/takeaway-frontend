@@ -33,8 +33,9 @@ export class Poll {
  * Entity representing an option for a Poll.
  */
 export class Option {
-  constructor (id, name) {
+  constructor (id, name, address) {
     this.id = id
     this.name = name
+    this.address = address
   }
 }
